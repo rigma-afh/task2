@@ -9,6 +9,9 @@ use App\Models\Resident;
 
 use App\DataTables\ResidentDataTable;
 use Illuminate\Http\Request;
+use App\Notifications\ResidentAdded;
+use App\Models\User;
+use Illuminate\Support\Facades\Notification;
 
 class ResidentWebController extends Controller
 {
@@ -16,8 +19,8 @@ class ResidentWebController extends Controller
      * Display a listing of the resource.
      */
 public function index(ResidentDataTable $dataTable)
-    {
-        return $dataTable->render('welcome');
+    {   $resident = Resident::all();
+        return $dataTable->render('welcome',compact('resident'));
     }
 
 
@@ -34,8 +37,17 @@ public function index(ResidentDataTable $dataTable)
      */
     public function store(ResidentRequest $request)
     {
-        Resident::create($request->validated());
+        $resident=Resident::create($request->validated());
+        $users=User::all();
+        // foreach($user as $u){
+        //     $u->notify(new ResidentAdded($resident));
+        // }
+
+     Notification::send($users, new ResidentAdded($resident));
         return redirect('/residents')->with('success','resident added successfully');
+
+
+
     }
 
 
@@ -73,10 +85,9 @@ public function index(ResidentDataTable $dataTable)
     public function destroy(string $id)
     {
          Resident::findOrFail($id)->delete();
-        return redirect()->route('residents.index')->with('success', 'Residegnt deleted successfully');
+        return redirect()->route('residents.index');
+
     }
-
-
 
     public function toggleStatus($id)
     {

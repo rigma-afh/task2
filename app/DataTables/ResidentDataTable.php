@@ -61,12 +61,13 @@ SVG;
             $buttons .= '<a href="' . route('residents.edit', $id) . '" class="btn btn-sm" title="Edit Resident">' . $editSvg . '</a>';
 
             $buttons .= '
-                <form action="' . route('residents.destroy', $id) . '" method="POST" style="display:inline;">
-                    ' . csrf_field() . method_field('DELETE') . '
-                    <button type="submit" class="btn btn-sm btn-delete" title="Delete Resident" onclick="return confirm(\'Are you sure you want to delete this resident?\');">
-                        ' . $deleteSvg . '
-                    </button>
-                </form>
+                <form action="' . route('residents.destroy', $id) . '" method="POST" name="dlt-form">
+    ' . csrf_field() . method_field('DELETE') . '
+<button type="submit" class="btn btn-sm btn-delete">
+    Delete
+</button>
+</form>
+
             ';
 
             // Use your exact provided toggle status form here:

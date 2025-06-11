@@ -62,3 +62,72 @@
     </form>
 
 </div>
+
+@push('scripts')
+<script>
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.body.addEventListener('click', function (e) {
+        const deleteBtn = e.target.closest('.btn-delete');
+        if (deleteBtn) {
+            e.preventDefault();
+            const form = deleteBtn.closest('form');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will permanently delete the resident.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) form.submit();
+            });
+            return;
+        }
+
+
+
+        // const addBtn = e.target.closest('.btn-add');
+        // if (addBtn) {
+        //     e.preventDefault();
+        //     const form = deleteBtn.closest('form');
+        //          Swal.fire({
+        //          title: "Resident added successfully!",
+        //          icon: "success",
+        //          draggable: true
+        //         }).then((result) => {
+        //        if (result.isConfirmed) {
+        //         // Redirect to the add resident page
+        //         window.location.href = addBtn.getAttribute('href');
+        //        }
+        //     });
+        //     return;
+        // }
+
+
+
+
+        const statusToggle = e.target.closest('.form-check-input');
+        if (statusToggle) {
+            e.preventDefault();
+            const form = statusToggle.closest('form');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will change resident status.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Save',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) form.submit();
+            });
+        }
+    });
+});
+</script>
+@endpush
