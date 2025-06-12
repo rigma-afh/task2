@@ -9,8 +9,9 @@ use App\Models\Resident;
 
 use App\DataTables\ResidentDataTable;
 use Illuminate\Http\Request;
-use App\Notifications\ResidentAdded;
+
 use App\Models\User;
+use App\Notifications\ResidentCreated;
 use Illuminate\Support\Facades\Notification;
 
 class ResidentWebController extends Controller
@@ -37,14 +38,13 @@ public function index(ResidentDataTable $dataTable)
      */
     public function store(ResidentRequest $request)
     {
-        $resident=Resident::create($request->validated());
-        $users=User::all();
-        // foreach($user as $u){
-        //     $u->notify(new ResidentAdded($resident));
-        // }
 
-     Notification::send($users, new ResidentAdded($resident));
-        return redirect('/residents')->with('success','resident added successfully');
+        $resident=Resident::create($request->validated());
+  
+$users = User::all()->all(); // Converts Eloquent Collection to array of User models
+Notification::send($users, new ResidentCreated($resident));
+// }
+    return redirect('/residents')->with('success','resident added successfully');
 
 
 

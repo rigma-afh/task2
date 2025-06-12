@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidentWebController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -36,8 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 });
-
-//Route::post('/residents/{id}/toggle-status', [ResidentWebController::class, 'toggleStatus'])->name('residents.toggleStatus');;
-
+Route::post('/notifications/mark-all-read', function () {
+    Auth::user()->unreadNotifications->markAsRead();
+    return response()->json(['success' => true]);
+})->middleware('auth')->name('notifications.markAllRead');
 
 require __DIR__.'/auth.php';

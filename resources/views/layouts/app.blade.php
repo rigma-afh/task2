@@ -4,7 +4,30 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
+<style>
+    /* Add to your Blade or CSS file */
+.resident-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    background: #435d7d;
+    color: #fff;
+    padding: 15px 30px 15px 15px;
+    border-radius: 6px;
+    z-index: 9999;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    margin-bottom: 10px;
+}
+.close-notif {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    float: right;
+    cursor: pointer;
+}
+    </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -42,11 +65,11 @@
             <!-- Page Content -->
             <main class="text-white dark:text-white">
                 {{-- {{ $slot }} --}}
-                        @yield( 'content')
 
+   @yield( 'content')
             </main>
         </div>
-        @stack('styles')
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

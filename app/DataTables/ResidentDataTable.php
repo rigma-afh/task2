@@ -60,26 +60,43 @@ SVG;
 
             $buttons .= '<a href="' . route('residents.edit', $id) . '" class="btn btn-sm" title="Edit Resident">' . $editSvg . '</a>';
 
-            $buttons .= '
-                <form action="' . route('residents.destroy', $id) . '" method="POST" name="dlt-form">
-    ' . csrf_field() . method_field('DELETE') . '
-<button type="submit" class="btn btn-sm btn-delete">
-    Delete
-</button>
-</form>
+$buttons .= '
+    <form action="' . route('residents.destroy', $id) . '" method="POST" name="dlt-form" style="display:inline;">
+        ' . csrf_field() . method_field('DELETE') . '
+        <button type="submit" class="btn btn-sm btn-danger btn-delete" title="Delete Resident">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    </form>
+';
 
-            ';
 
-            // Use your exact provided toggle status form here:
-            $buttons .= '
-                <form action="' . route('residents.toggleStatus', $id) . '" method="POST" style="display:inline;">
-                    ' . csrf_field() . '
-                    <button type="submit" class="btn btn-sm btn-primary" title="Toggle Status">
-                        Toggle Status
-                    </button>
-                </form>
-            ';
+//             // Use your exact provided toggle status form here:
+//           $buttons .= '
+//     <form action="' . route('residents.toggleStatus', $id) . '" method="POST" style="display:inline;">
+//         ' . csrf_field() . '
+//         <button type="submit" class="btn btn-sm btn-primary" title="Toggle Status">
+//             <i class="fas fa-toggle-on me-1"></i>
+//         </button>
+//     </form>
+// ';
 
+
+$statusChecked = $row->status === 'active' ? 'checked' : '';
+
+$buttons .= '
+    <form action="' . route('residents.toggleStatus', $row->id) . '" method="POST" class="m-0" title="Toggle Status">
+        ' . csrf_field() . '
+        <div class="form-check form-switch d-flex align-items-center m-0">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                name="status_toggle"
+                onchange="this.form.submit()"
+                ' . $statusChecked . '
+                title="Toggle Status">
+        </div>
+    </form>
+';
 
 
             $buttons .= '</div>';
@@ -106,33 +123,63 @@ SVG;
     /**
      * Optional method if you want to use the html builder.
      */
-    public function html(): HtmlBuilder
-    {
-        return $this->builder()
-                    ->setTableId('residents-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload'), Button::raw([
-                'text' => '<i class="fa fa-plus"></i> Add Resident',
-                'className' => 'btn btn-success',
-                'action' => 'function() {
-                    window.location.href = "' . route('residents.index') . '";
-                }',]),
+    // public function html(): HtmlBuilder
+    // {
+    //     return $this->builder()
+    //                 ->setTableId('residents-table')
+    //                 ->columns($this->getColumns())
+    //                 ->minifiedAjax()
+    //                 ->orderBy(1)
+    //                 ->selectStyleSingle()
+    //                 ->buttons([
+    //                     Button::make('excel'),
+    //                     Button::make('csv'),
+    //                     Button::make('pdf'),
+    //                     Button::make('print'),
+    //                     Button::make('reset'),
+    //                     Button::make('reload'), Button::raw([
+    //             'text' => '<i class="fa fa-plus"></i> Add Resident',
+    //             'className' => 'btn btn-success',
+    //             'action' => 'function() {
+    //                 window.location.href = "' . route('residents.index') . '";
+    //             }',]),
 
 
 
 
 
-                    ]);
-    }
+    //                 ]);
+    // }
+
+
+public function html()
+{
+    return $this->builder()
+        ->setTableId('residents-table')
+        ->columns($this->getColumns())
+        ->minifiedAjax()
+        ->parameters([
+            'dom' => 'lBfrtip', // layout options
+            'language' => [
+                'search' => '🔍 Search Residents:',
+                // 'lengthMenu' => 'Show _MENU_ residents per page',
+                'info' => 'Showing _START_ to _END_ of _TOTAL_ residents',
+                'paginate' => [
+                    'first' => 'First',
+                    'last' => 'Last',
+                    'next' => '→',
+                    'previous' => '←',
+                ],
+                'emptyTable' => 'No residents found.',
+            ],
+            'lengthMenu' => [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+        ]);
+}
+
+
+
+
+
 
     /**
      * Get the dataTable columns definition.
